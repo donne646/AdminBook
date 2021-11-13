@@ -1,0 +1,35 @@
+html, body {
+  min-height: 100%;
+  background-color: #eeeeee;
+}
+.App {
+  min-height: 100%;
+  margin: 0;
+}
+.btnSubmit{
+  padding: 1.5rem 0;
+}
+body {
+  background: rgb(0,123,255);
+background: linear-gradient(90deg, rgba(0,123,255,1) 0%, rgba(239,242,244,1) 100%);
+}
+
+@keyframes gradient {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+@import "navlink";
+@import "header";
+@import "cardtable";
+@import "contentmanageproduct";
+@import "contentmanagecategory";
+@import "contentmanagepublish";
+@import "contentmanageuser";
+@import "contentmanageorder";

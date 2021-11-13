@@ -1,0 +1,11 @@
+.cardOrderDetail{
+    margin:2rem 0;
+    &__rowDetail{
+        display: flex;
+        justify-content: space-around;
+        &--labelDetail{
+            font-size : 18px;
+            font-weight: 500;
+        }
+    }
+}

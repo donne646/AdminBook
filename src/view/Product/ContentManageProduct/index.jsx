@@ -1,0 +1,54 @@
+import React from 'react'
+import { Accordion,Table } from 'react-bootstrap';
+import ModalEditProduct from '../ModalEditProduct';
+const headerTable = ["id","Tên sách","Tác giả","Số lượng","Đơn giá","Số trang","Chi tiết"];
+const testDataProduct = [
+    {id : 1, nameProduct: "Vui vẻ không quạu nha",quantity : 10 , price: 50000, author: "Tản Văn", numberPage: 220,img:[]}// get products có array img vậy 
+];
+export default function ContentManageProduct() {
+    return (
+        <div className="ContentManageProduct">
+            <Accordion defaultActiveKey="0" className="ContentManageProduct__accordion">
+                <Accordion.Item eventKey="0">
+                    <Accordion.Header>Danh sách sản phẩm</Accordion.Header>
+                    <Accordion.Body>
+                        <div className="cardTable">
+                            <Table>
+                                <thead>
+                                    <tr>                  
+                                    {headerTable.map((data,key)=>{
+                                        return (
+                                        <th key={key}>{data}</th>  
+                                        );
+                                    })}
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {testDataProduct.map((data,key)=>{
+                                        return (
+                                            <tr key={key}>
+                                                <td>{data.id}</td>
+                                                <td>{data.nameProduct}</td>
+                                                <td>{data.author}</td>
+                                                <td>{data.quantity}</td>
+                                                <td>{data.price}</td>
+                                                <td>{data.numberPage}</td>
+                                                <td><ModalEditProduct dataModal={data}/></td>
+                                            </tr>
+                                        );
+                                    })}
+                                    
+                                </tbody>
+                            </Table>
+                        </div>
+                    </Accordion.Body>
+                </Accordion.Item>
+                <Accordion.Item eventKey="1">
+                    <Accordion.Header>Thêm sản phẩm</Accordion.Header>
+                    <Accordion.Body>
+                    </Accordion.Body>
+                </Accordion.Item>
+            </Accordion>
+        </div>
+    )
+}

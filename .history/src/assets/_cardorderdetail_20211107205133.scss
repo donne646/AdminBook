@@ -1,0 +1,16 @@
+.cardOrderDetail{
+    margin:2rem 0;
+    &__rowDetail{
+        display: flex;
+        justify-content: space-between;
+        padding: 0 2rem;
+        label{
+            padding: 1.5rem 0;
+            font-size : 18px;
+            font-weight: 500;
+        }
+        p{
+            margin :0;
+        }
+    }
+}

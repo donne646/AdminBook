@@ -1,0 +1,15 @@
+.cardHeader{
+    display: flex;
+    justify-content: space-between;    
+    &__header{
+        display: flex;
+        justify-content: space-between;    
+        color: #ccc;
+        font-weight: bold;
+        height: 50px;
+        bottom: 0;
+        left: 0;
+        background-color: white;
+        padding: 0 1%;
+    }
+}

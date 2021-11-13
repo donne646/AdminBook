@@ -1,0 +1,18 @@
+html, body {
+  min-height: 100%;
+  background-color: #eeeeee;
+}
+.App {
+  min-height: 100%;
+  margin: 0;
+}
+.btnSubmit{
+  padding: 1.5rem 0;
+}
+@import "navlink";
+@import "header";
+@import "cardtable";
+@import "contentmanageproduct";
+@import "contentmanagecategory";
+@import "contentmanagepublish";
+@import "contentmanageruser"
