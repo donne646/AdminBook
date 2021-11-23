@@ -1,7 +1,7 @@
 import React,{useState} from 'react';
 import {Modal,Button,Form,Row,Col} from "react-bootstrap";
 
-export default function ModalEditPublish(props) {
+export default function ModalEditAuthor(props) {
     const [show, setShow] = useState(false);  
     const [values,setValue] = useState(props.dataModal);
     const [isDisable,setDisabled] = useState(true);
@@ -31,25 +31,25 @@ export default function ModalEditPublish(props) {
       } 
     }
     return (
-      <>
+        <>
         <Button variant="primary" onClick={handleShow}>
           Sửa
         </Button>
         <Modal show={show} onHide={handleClose} animation={false} size="lg" aria-labelledby="contained-modal-title-vcenter" centered>
           <Modal.Header closeButton>
-            <Modal.Title>Sửa thể loại</Modal.Title>
+            <Modal.Title>Sửa tác giả</Modal.Title>
           </Modal.Header>
           <Modal.Body>
-                    <Form noValidate validated={validated} className="FormEditCate" onSubmit={(event)=> handleEdit(event)}>
+                    <Form noValidate validated={validated} className="FormEditAuthor" onSubmit={(event)=> handleEdit(event)}>
                             <Row>
                                 <Form.Group as={Col} controlId="formGridId">
                                     <Form.Label>ID</Form.Label>
                                     <Form.Control type='text' name="id" defaultValue={props.dataModal.id} readOnly required/>
                                 </Form.Group>
-                                <Form.Group as={Col} controlId="formGridNamePublish">
-                                    <Form.Label>Tên thể loại</Form.Label>
+                                <Form.Group as={Col} controlId="formGridNameAuthor">
+                                    <Form.Label>Tên tác giả</Form.Label>
                                     <Form.Control type='text' name="name" defaultValue={props.dataModal.name} required onChange={(event)=>inputChange(event)}/>
-                                    <Form.Control.Feedback type="invalid">Vui lòng nhập tên thể loại</Form.Control.Feedback>
+                                    <Form.Control.Feedback type="invalid">Vui lòng nhập tên tác giả</Form.Control.Feedback>
                                 </Form.Group>
                             </Row>
                             <div className="btnSubmit d-flex justify-content-end">
@@ -61,5 +61,5 @@ export default function ModalEditPublish(props) {
           </Modal.Body>
         </Modal>
       </>
-    );
-  }
+    )
+}

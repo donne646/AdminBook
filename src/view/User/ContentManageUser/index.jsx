@@ -15,7 +15,7 @@ export default function ContentManageUser() {
                 <Accordion.Item eventKey="0">
                     <Accordion.Header>Danh sách tài khoản khách hàng</Accordion.Header>
                     <Accordion.Body>
-                    <div className="cardTable">
+                    <div className="cardTable table-wrapper-scroll-y my-custom-scrollbar">
                         <Table>
                             <thead>
                                 <tr>                  

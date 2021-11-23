@@ -1,18 +1,25 @@
 import React from 'react'
-import { Accordion,Table } from 'react-bootstrap';
-import ModalEditProduct from '../ModalEditProduct';
+import { Accordion,Table,Button } from 'react-bootstrap';
+
+import {useRouteMatch,useHistory } from 'react-router-dom';
+import CreateProduct from '../CreateProduct';
 const headerTable = ["id","Tên sách","Tác giả","Số lượng","Đơn giá","Số trang","Chi tiết"];
 const testDataProduct = [
     {id : 1, nameProduct: "Vui vẻ không quạu nha",quantity : 10 , price: 50000, author: "Tản Văn", numberPage: 220,img:[]}// get products có array img vậy 
 ];
 export default function ContentManageProduct() {
+    const match = useRouteMatch();
+    const history = useHistory();
+    const handleEditProduct = (data)=>{
+        history.push(`${match.url}/${data.id}`)
+    }
     return (
         <div className="ContentManageProduct">
             <Accordion defaultActiveKey="0" className="ContentManageProduct__accordion">
                 <Accordion.Item eventKey="0">
                     <Accordion.Header>Danh sách sản phẩm</Accordion.Header>
                     <Accordion.Body>
-                        <div className="cardTable">
+                        <div className="cardTable table-wrapper-scroll-y my-custom-scrollbar">
                             <Table>
                                 <thead>
                                     <tr>                  
@@ -33,7 +40,7 @@ export default function ContentManageProduct() {
                                                 <td>{data.quantity}</td>
                                                 <td>{data.price}</td>
                                                 <td>{data.numberPage}</td>
-                                                <td><ModalEditProduct dataModal={data}/></td>
+                                                <td><Button variant="secondary" onClick={()=>handleEditProduct(data)}>Xem chi tiết</Button></td>
                                             </tr>
                                         );
                                     })}
@@ -46,6 +53,7 @@ export default function ContentManageProduct() {
                 <Accordion.Item eventKey="1">
                     <Accordion.Header>Thêm sản phẩm</Accordion.Header>
                     <Accordion.Body>
+                        <CreateProduct/>
                     </Accordion.Body>
                 </Accordion.Item>
             </Accordion>

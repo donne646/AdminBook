@@ -1,4 +1,4 @@
-import React from 'react'
+import React from 'react';
 import { Route, Switch, useRouteMatch } from 'react-router';
 import Header from "../../../components/Header";
 import ContentManageOrder from '../ContentManageOrder';

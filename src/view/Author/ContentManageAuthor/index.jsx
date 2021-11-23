@@ -1,23 +1,20 @@
-
-import axios from 'axios';
-import React,{useState,useEffect} from 'react'
-import { Accordion,Form,Col,Row,Button,Table} from 'react-bootstrap';
-import ModalEditPublish from '../ModalEditPublish';
-const headerTable = ["id","Tên nhà xuất bản","Sửa"];
-const testDataPublish = [
-    {id:1 , name: "NXB trẻ"}
-]
-export default function ContentManagePublish() {
-    const [dataPublish,setDataPublish] = useState([]);
-    const [values,setValue] = useState({
-        namePublishValue: ""
-    });
+import React, { useState,useEffect } from 'react'
+import { Accordion,Table,Form,Button,Row,Col } from 'react-bootstrap';
+import ModalEditAuthor from "../ModalEditAuthor";
+let headerTable = ["id","Mã khuyến mãi","Sửa"];
+let testdataAuthor = [
+    {id : 1, name: "Nguyễn Nhật Ánh"},
+];
+export default function ContentManageAuthor() {
+    const [dataAuthor,setDataVoucher] = useState([]);
     const [validated,setValidated] = useState(false);
+    const [values,setValue] = useState({
+        name: ""
+    });
 
     useEffect(() => {
-        setDataPublish(testDataPublish);
-    }, []);
-    
+        setDataVoucher(testdataAuthor)
+    }, [])
     const submitFormAdd = (event)=>{
         const form = event.currentTarget;
         event.preventDefault();
@@ -34,12 +31,11 @@ export default function ContentManagePublish() {
         })
         );
     }
-
     return (
-        <div className="ContentManagePublish">
-            <Accordion defaultActiveKey="0" className="ContentManagePublish__accordion">
+            <div className="ContentManageVoucher">
+            <Accordion defaultActiveKey="0" className="ContentManageVoucher__accordion">
                 <Accordion.Item eventKey="0">
-                    <Accordion.Header>Danh sách nhà xuất bản</Accordion.Header>
+                    <Accordion.Header>Danh sách tác giả</Accordion.Header>
                     <Accordion.Body>
                     <div className="cardTable table-wrapper-scroll-y my-custom-scrollbar">
                         <Table>
@@ -53,12 +49,12 @@ export default function ContentManagePublish() {
                                 </tr>
                             </thead>
                             <tbody>
-                                {dataPublish.map((data,key)=>{
+                                {dataAuthor.map((data,key)=>{
                                     return (
                                         <tr key={key}>
                                             <td>{data.id}</td>
                                             <td>{data.name}</td>
-                                            <td><ModalEditPublish dataModal={data}/></td>
+                                            <td><ModalEditAuthor dataModal={data}/></td>
                                         </tr>
                                     );
                                 })}
@@ -68,19 +64,19 @@ export default function ContentManagePublish() {
                     </Accordion.Body>
                 </Accordion.Item>
                 <Accordion.Item eventKey="1">
-                    <Accordion.Header>Thêm thể loại</Accordion.Header>
+                    <Accordion.Header>Thêm tác giả</Accordion.Header>
                     <Accordion.Body>
-                        <Form noValidate validated={validated} onSubmit={(event)=>submitFormAdd(event)} className="FormAddPublish">
+                        <Form noValidate validated={validated} onSubmit={(event)=>submitFormAdd(event)} className="FormAddVoucher">
                             <Row>
-                                <Form.Group as={Col} controlId="formGridNamePublish">
-                                    <Form.Label>Tên nhà xuất bản</Form.Label>
+                                <Form.Group as={Col} controlId="formGridNameAuthor">
+                                    <Form.Label>Tên tác giả</Form.Label>
                                     <Form.Control type='text' name="name" required onChange={(event)=>inputChange(event)}/>
-                                    <Form.Control.Feedback type="invalid">Vui lòng nhập tên nhà xuất bản</Form.Control.Feedback>
+                                    <Form.Control.Feedback type="invalid">Vui lòng nhập tên tác giả</Form.Control.Feedback>
                                 </Form.Group>
                             </Row>
                             <div className="btnSubmit">
                                 <Button variant="success" type="submit">
-                                    Thêm thể loại
+                                    Thêm
                                 </Button>
                             </div>
                         </Form>
@@ -90,4 +86,3 @@ export default function ContentManagePublish() {
         </div>
     )
 }
-

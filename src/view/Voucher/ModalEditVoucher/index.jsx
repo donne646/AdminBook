@@ -1,9 +1,12 @@
 import React,{useState} from 'react';
 import {Modal,Button,Form,Row,Col} from "react-bootstrap";
+export default function ModalEditVoucher(props) {
 
-export default function ModalEditPublish(props) {
     const [show, setShow] = useState(false);  
-    const [values,setValue] = useState(props.dataModal);
+    const [values,setValue] = useState({
+        id: props.dataModal.id,
+        quantity: ""
+    });
     const [isDisable,setDisabled] = useState(true);
     const [validated,setValidated] = useState(false);
     const handleClose = () => setShow(false);
@@ -26,31 +29,41 @@ export default function ModalEditPublish(props) {
       })
       );
       setDisabled(false);
-      if(value === "") {
+      if(value === "" || value < 0) {
         setDisabled(true);
       } 
     }
     return (
-      <>
+        <>
         <Button variant="primary" onClick={handleShow}>
           Sửa
         </Button>
         <Modal show={show} onHide={handleClose} animation={false} size="lg" aria-labelledby="contained-modal-title-vcenter" centered>
           <Modal.Header closeButton>
-            <Modal.Title>Sửa thể loại</Modal.Title>
+            <Modal.Title>Sửa mã khuyến mãi</Modal.Title>
           </Modal.Header>
           <Modal.Body>
-                    <Form noValidate validated={validated} className="FormEditCate" onSubmit={(event)=> handleEdit(event)}>
+                    <Form noValidate validated={validated} className="FormEditAuthor" onSubmit={(event)=> handleEdit(event)}>
                             <Row>
                                 <Form.Group as={Col} controlId="formGridId">
                                     <Form.Label>ID</Form.Label>
-                                    <Form.Control type='text' name="id" defaultValue={props.dataModal.id} readOnly required/>
+                                    <Form.Control type='text' name="id" defaultValue={props.dataModal.id} readOnly/>
                                 </Form.Group>
-                                <Form.Group as={Col} controlId="formGridNamePublish">
-                                    <Form.Label>Tên thể loại</Form.Label>
-                                    <Form.Control type='text' name="name" defaultValue={props.dataModal.name} required onChange={(event)=>inputChange(event)}/>
-                                    <Form.Control.Feedback type="invalid">Vui lòng nhập tên thể loại</Form.Control.Feedback>
+                                <Form.Group as={Col} controlId="formGridNameVoucher">
+                                    <Form.Label>Mã khuyến mãi</Form.Label>
+                                    <Form.Control type='text' name="name" defaultValue={props.dataModal.name} readOnly/>
                                 </Form.Group>
+                            </Row>
+                            <Row>
+                                <Form.Group as={Col} controlId="formGridDiscount">
+                                    <Form.Label>Giảm giá</Form.Label>
+                                    <Form.Control type='text' name="id" defaultValue={props.dataModal.discount} readOnly/>
+                                </Form.Group>  
+                                <Form.Group as={Col} controlId="formGridQuantity">
+                                    <Form.Label>Số lượng</Form.Label>
+                                    <Form.Control type='number' min="0" name="id" defaultValue={props.dataModal.quantity} required onChange={(e)=>inputChange(e)}/>
+                                    <Form.Control.Feedback type="invalid">Vui lòng số lượng</Form.Control.Feedback>
+                                </Form.Group>  
                             </Row>
                             <div className="btnSubmit d-flex justify-content-end">
                                   <Button variant="primary" type="submit" disabled={isDisable}>
@@ -61,5 +74,5 @@ export default function ModalEditPublish(props) {
           </Modal.Body>
         </Modal>
       </>
-    );
-  }
+    )
+}

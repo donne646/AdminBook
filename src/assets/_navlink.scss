@@ -47,7 +47,7 @@
     }
     }
     &__content{
-        height: 100%;
+        min-height: 100%;
         padding: 0 2%;
         min-width: 80%;
     }
@@ -77,7 +77,7 @@
   }
 } 
 .viewAdmin{
-  height: 100%;
+  min-height: 100%;
   &__nav{
     background: linear-gradient(110deg, #cbe4ff 60%, #82beff 60%);
     &--header img{

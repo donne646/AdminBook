@@ -1,10 +1,14 @@
 import React,{useState} from 'react';
 
+import { Route, Switch, useRouteMatch } from 'react-router';
 import Header from '../../../components/Header';
+
+import EditProduct from '../EditProduct';
 import ContentManageProduct from '../ContentManageProduct';
 import ProductContext from "../../../Context/ProductContext/ProductContext";
 
-const ManageProdct = () => {
+const ManageProduct = () => {
+    const match = useRouteMatch();
     const [flag,setFlag] = useState();
     const handleEditFlag = () =>{
         setFlag("Edit")
@@ -18,12 +22,18 @@ const ManageProdct = () => {
             handleEditFlag : ()=>handleEditFlag(),
             handleAddFlag : ()=> handleAddFlag()
         }}>
-            <div>
-                <Header title="Quản lý sản phẩm"/>
-                <ContentManageProduct/>
-            </div>
+            <Switch>
+                <Route path={match.url+'/:id'}>
+                    <Header title="Quản lý sản phẩm"/> 
+                    <EditProduct/>
+                </Route>
+                <Route path={match.url}>
+                    <Header title="Quản lý sản phẩm"/> 
+                    <ContentManageProduct/>
+                </Route>
+            </Switch>
         </ProductContext.Provider>
     );
 };
 
-export default ManageProdct;
+export default ManageProduct;

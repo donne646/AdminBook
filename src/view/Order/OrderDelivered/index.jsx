@@ -3,13 +3,13 @@ import { Table,Button } from 'react-bootstrap';
 
 import {useRouteMatch,useHistory } from 'react-router-dom';
 import CancelOrder from '../CancelOrrder';
-let headerTable = ["ID đơn hàng","Tên người dùng","Số điện thoại","Tổng tiền","Chi tiết","Hủy","Xác nhận"];
+let headerTable = ["ID đơn hàng","Tên người dùng","Số điện thoại","Tổng tiền","Chi tiết","Xác nhận"];
 let testDataOrders = [
     {ID : 1,fullname: "Nguyễn Hữu Nhân"},
     {ID : 1,fullname: "Nguyễn Hữu Nhân"},
     {ID : 1,fullname: "Nguyễn Hữu Nhân"}
 ];
-export default function OrderConfirm() {
+export default function OrderDelivered() {
     const match = useRouteMatch();
     const history = useHistory();
     const handleSeeDetail = (data)=>{
@@ -37,7 +37,6 @@ export default function OrderConfirm() {
                                                 <td>{data.ID}</td>
                                                 <td>{data.fullname}</td>
                                                 <td><Button variant="secondary" onClick={()=>handleSeeDetail(data)}>Xem chi tiết</Button></td>
-                                                <td><CancelOrder/></td>
                                                 <td><Button variant="success" onClick={()=>handleConfirm(data)}>Xác nhận</Button></td>
                                             </tr>
                                         )

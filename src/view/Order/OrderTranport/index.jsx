@@ -9,7 +9,7 @@ let testDataOrders = [
     {ID : 1,fullname: "Nguyễn Hữu Nhân"},
     {ID : 1,fullname: "Nguyễn Hữu Nhân"}
 ];
-export default function OrderConfirm() {
+export default function OrderTranport() {
     const match = useRouteMatch();
     const history = useHistory();
     const handleSeeDetail = (data)=>{

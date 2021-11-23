@@ -6,10 +6,10 @@ import CategoryContext from '../../../Context/CategoryContext/CategoryContent';
 import ModalEditCategory from '../ModalEditCategory';
 let headerTable = ["id","Tên thể loại","Sửa"];
 let testdataCategory = [
-    {id : 1, nameCategory: "Trinh Thám"},
-    {id : 2, nameCategory: "Thiếu Nhi"},
-    {id : 3, nameCategory: "Tiểu Thuyết"},
-    {id : 4, nameCategory: "Giáo trình"},
+    {id : 1, name: "Trinh Thám"},
+    {id : 2, name: "Thiếu Nhi"},
+    {id : 3, name: "Tiểu Thuyết"},
+    {id : 4, name: "Giáo trình"},
 ];
 export default function ContentManageCategory() {
     const [dataCategory,setDataCategory] = useState([]);
@@ -46,7 +46,7 @@ export default function ContentManageCategory() {
                 <Accordion.Item eventKey="0">
                     <Accordion.Header>Danh sách thể loại</Accordion.Header>
                     <Accordion.Body>
-                    <div className="cardTable">
+                    <div className="cardTable table-wrapper-scroll-y my-custom-scrollbar">
                         <Table>
                             <thead>
                                 <tr>                  
@@ -62,7 +62,7 @@ export default function ContentManageCategory() {
                                     return (
                                         <tr key={key}>
                                             <td>{data.id}</td>
-                                            <td>{data.nameCategory}</td>
+                                            <td>{data.name}</td>
                                             <td><ModalEditCategory dataModal={data}/></td>
                                         </tr>
                                     );
@@ -79,12 +79,12 @@ export default function ContentManageCategory() {
                             <Row>
                                 <Form.Group as={Col} controlId="formGridNameCategory">
                                     <Form.Label>Tên thể loại</Form.Label>
-                                    <Form.Control type='text' name="nameCategory" required onChange={(event)=>inputChange(event)}/>
+                                    <Form.Control type='text' name="name" required onChange={(event)=>inputChange(event)}/>
                                     <Form.Control.Feedback type="invalid">Vui lòng nhập tên thể loại</Form.Control.Feedback>
                                 </Form.Group>
                             </Row>
                             <div className="btnSubmit">
-                                <Button variant="primary" type="submit">
+                                <Button variant="success" type="submit">
                                     Thêm thể loại
                                 </Button>
                             </div>
