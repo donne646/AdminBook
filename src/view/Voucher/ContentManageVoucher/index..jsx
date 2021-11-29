@@ -1,24 +1,55 @@
 import React,{useState,useEffect} from 'react'
-
+import axios from 'axios';
 import { Accordion,Form,Col,Row,Button,Table} from 'react-bootstrap';
 import ModalEditVoucher from '../ModalEditVoucher';
 let headerTable = ["id","Mã khuyến mãi","Giảm","Số lượng","Sửa"];
-let testdataVoucher = [
-    {id : 1, name: "KHUYENMAITHANG11",discount: "200000",quantity: "100"},
-];
+
 export default function ContentManageVoucher() {
+
+    const [flag,setFlag] = useState(false);
+    const handleEditFlag = () =>{
+        if(flag){
+            setFlag(false)
+        }else{
+            setFlag(true)
+        }
+    }
     const [dataVoucher,setDataVoucher] = useState([]);
     const [validated,setValidated] = useState(false);
-    const [values,setValue] = useState({
-        name: ""
-    });
-    useEffect(()=>{
-        setDataVoucher(testdataVoucher)
-    },[])
-    const submitFormAdd = (event)=>{
-        const form = event.currentTarget;
-        event.preventDefault();
+    const [values,setValue] = useState();
+    useEffect(() => {
+        const token = localStorage.getItem("accessToken");
+        const fetchData = async ()=>{
+            const response = await axios.get("http://localhost:5000/vouchers",{
+                headers:{
+                    'Authorization' : `Bearer ${token}` 
+                }
+            })
+            setDataVoucher(response.data);
+        }
+        fetchData();
+    }, [flag]);
+    const submitFormAdd = async (event)=>{
+        const token = localStorage.getItem("accessToken");
         setValidated(true);
+        const form = event.currentTarget;
+        if (form.checkValidity() === false) {
+            event.preventDefault();
+        }
+        else{
+            event.preventDefault();
+            const response = await axios.post("http://localhost:5000/vouchers",values,{
+                headers:{
+                    'Authorization' : `Bearer ${token}` 
+                }
+            })
+            console.log(response)
+            if(response.data.Message){
+                alert(response.data.Message)
+                handleEditFlag();
+                form.reset();
+            }
+        }
     };
 
     const inputChange = (event) =>{
@@ -52,11 +83,11 @@ export default function ContentManageVoucher() {
                                 {dataVoucher.map((data,key)=>{
                                     return (
                                         <tr key={key}>
-                                            <td>{data.id}</td>
-                                            <td>{data.name}</td>
+                                            <td>{data._id}</td>
+                                            <td>{data.code}</td>
                                             <td>{data.discount}</td>
                                             <td>{data.quantity}</td>
-                                            <td><ModalEditVoucher dataModal={data}/></td>
+                                            <td><ModalEditVoucher dataModal={data} handleEdit= {handleEditFlag}/></td>
                                         </tr>
                                     );
                                 })}
@@ -72,7 +103,7 @@ export default function ContentManageVoucher() {
                             <Row>
                                 <Form.Group as={Col} controlId="formGridNameVoucher">
                                     <Form.Label>Mã khuyến mãi</Form.Label>
-                                    <Form.Control type='text' name="name" required onChange={(event)=>inputChange(event)}/>
+                                    <Form.Control type='text' name="code" required onChange={(event)=>inputChange(event)}/>
                                     <Form.Control.Feedback type="invalid">Vui lòng nhập mã khuyến mãi</Form.Control.Feedback>
                                 </Form.Group>
                             </Row>
@@ -89,6 +120,10 @@ export default function ContentManageVoucher() {
                                 </Form.Group>
                                 
                             </Row>
+                            <Form.Group controlId="formDescriptionVoucher">
+                                <Form.Label>Mô tả</Form.Label>
+                                <Form.Control as="textarea" name="description" onChange={(event)=>inputChange(event)}/>
+                            </Form.Group>
                             <div className="btnSubmit">
                                 <Button variant="success" type="submit">
                                     Thêm

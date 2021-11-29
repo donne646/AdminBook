@@ -5,23 +5,10 @@ import Header from '../../../components/Header';
 
 import EditProduct from '../EditProduct';
 import ContentManageProduct from '../ContentManageProduct';
-import ProductContext from "../../../Context/ProductContext/ProductContext";
 
 const ManageProduct = () => {
     const match = useRouteMatch();
-    const [flag,setFlag] = useState();
-    const handleEditFlag = () =>{
-        setFlag("Edit")
-    }
-    const handleAddFlag = () =>{
-        setFlag("Add")
-    }
     return (
-        <ProductContext.Provider value={{
-            flag: flag,
-            handleEditFlag : ()=>handleEditFlag(),
-            handleAddFlag : ()=> handleAddFlag()
-        }}>
             <Switch>
                 <Route path={match.url+'/:id'}>
                     <Header title="Quản lý sản phẩm"/> 
@@ -32,7 +19,6 @@ const ManageProduct = () => {
                     <ContentManageProduct/>
                 </Route>
             </Switch>
-        </ProductContext.Provider>
     );
 };
 

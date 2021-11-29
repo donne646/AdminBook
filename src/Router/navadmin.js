@@ -6,11 +6,12 @@ import ManageUser from "../view/User/ManagerUser";
 import ManageVoucher from "../view/Voucher/ManageVoucher";
 import ManageAuthor from "../view/Author/ManageAuthor";
 export const routeNavAdmin = [
+
     {
         icon : "fa fa-shopping-cart navLink__icon",
         path: "/Admin/Orders",
         label : "Quản lý đơn hàng",
-        component: <ManageOrder/>
+        component: <ManageOrder />
     },
     {
         icon : "fa fa-book navLink__icon",

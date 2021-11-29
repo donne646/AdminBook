@@ -13,6 +13,7 @@ const index = (props) => {
                             border: "1px solid #007bff",
                             borderRadius: "5px"
                         }}
+                        exact = {props.exact}
                         >
                             <i className={props.icon}></i>
                             {props.label}

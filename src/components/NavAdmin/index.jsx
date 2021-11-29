@@ -1,10 +1,11 @@
 import React from 'react';
-import { BrowserRouter as Router,Switch,Route} from 'react-router-dom';
+import { BrowserRouter as Router,Switch,Route,useRouteMatch} from 'react-router-dom';
 import {routeNavAdmin} from "../../Router/navadmin";
 import logo from "../../Image/SAGOBooK.png";
 import NavLinkComponent from "../NavLinkComponent"; 
-import OrderDetail from '../../view/Order/OrderDetail';
+import Dashboard from '../../view/Dashboard';
 function NavAdmin(){
+    const match = useRouteMatch();
     const clickNav = () =>{
         const stateNav = document.getElementById("viewAdmin__nav--body").style.display;
         if(stateNav === "none"){
@@ -25,15 +26,21 @@ function NavAdmin(){
                     <hr/>
                     <div className="viewAdmin__nav--hamburger" >
                         <i className="fa fa-bars"  id="iconNav" onClick={()=>clickNav()}> Danh mục quản lý </i>
-                        
                     </div>
                     <div className="viewAdmin__nav--body" id="viewAdmin__nav--body">
+                        <NavLinkComponent 
+                            icon = "fa fa-line-chart navLink__icon"
+                            to="/Admin/Home"
+                            label="Thống kê"
+                            exact="true"
+                        />
                         {routeNavAdmin.map((value,key)=>{
                             return (
                                 <NavLinkComponent key={key} 
                                     icon = {value.icon}
                                     to={value.path}
                                     label={value.label}
+                                    exact="false"
                                 />
                             ); 
                         })}
@@ -42,9 +49,12 @@ function NavAdmin(){
                 </div>
                 <div className="viewAdmin__content">
                     <Switch>
+                        <Route path="/Admin/Home" >
+                            <Dashboard/>
+                        </Route>
                     {routeNavAdmin.map((value,key)=>{
                         return (
-                            <Route path = {value.path} key={key}>
+                            <Route path = {value.path} key={key} >
                                 {value.component}
                             </Route>
                         ); 

@@ -1,3 +1,4 @@
+import axios from 'axios';
 import React,{useState} from 'react'
 import {Button,Form,Modal,FloatingLabel} from "react-bootstrap";
 
@@ -6,28 +7,38 @@ let reasonCancel = [
   {reason:"Shipper làm thất lại đơn hàng"},
   {reason: "Khác"}
 ]
-export default function CancelOrder() {
+export default function CancelOrder({order,handleEdit,text}) {
     const [show, setShow] = useState(false);  
     const [isDisable,setDisabled] = useState(true);  
     const [disableInput,setDisableInput] = useState(true);
     const [values,setValue] = useState({
-      reasonCancel: ""
+      status: 5
     });
 
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
     
-    const hanldeSubmit = (event) =>{
+    const hanldeSubmit = async (event) =>{
       event.preventDefault();
+      console.log(values)
+      const response = await axios.patch("http://localhost:5000/orders/"+order._id,values)
+      console.log(response.data)
+      if(response.data.Message==="Cập nhật đơn hàng thành công"){
+        alert(response.data.Message);
+        handleClose();
+        handleEdit();
+      }else{
+        alert(response.data.Message)
+        handleClose();
+      }
     }
     const inputChange = (event) =>{
       const target = event.target;
       const name = target.name;
       const value = target.value;
-      console.log(value);
       setValue((values)=> ({
         ...values,
-        [name] : event.target.value
+        [name] : value
       })
       );
       
@@ -56,11 +67,10 @@ export default function CancelOrder() {
         setDisabled(true)
       }
     }
-    console.log(values);
     return (
         <>
-          <Button variant="danger" onClick={handleShow}>
-            Hủy
+          <Button variant="danger" onClick={handleShow} disabled={order.status._id===3||order.status._id===4||order.status._id===5 ? true : false}>
+            { text ? text : <i class="fa fa-times"></i>}
           </Button>
           <Modal show={show} onHide={handleClose} animation={false} size="lg" aria-labelledby="contained-modal-title-vcenter" centered backdrop="static" >
             <Modal.Header closeButton>
@@ -69,7 +79,7 @@ export default function CancelOrder() {
             <Modal.Body>
               <Form noValidate className="FormCancelOrder" onSubmit={(event)=>hanldeSubmit(event)}>
                     <Form.Group controlId="formGridNumberPage">
-                        <Form.Select name="id" onChange={(event)=>inputChange(event)}>
+                        <Form.Select name="cancelreason" onChange={(event)=>inputChange(event)}>
                           <option value="">Chọn lí do hủy đơn hàng</option>
                           {reasonCancel.map((value,key)=>{
                             return (                                
@@ -80,7 +90,7 @@ export default function CancelOrder() {
                     </Form.Group>
                     <Form.Group controlId="formGridNumberPage" className="mt-3">
                     <FloatingLabel controlId="floatingTextarea" label="Nhập lý do khác" className="mb-3">
-                        <Form.Control as="textarea" disabled={disableInput} name="reasonCancel" onChange={(event)=>textChange(event)}/>
+                        <Form.Control as="textarea" disabled={disableInput} name="cancelreason" onChange={(event)=>textChange(event)}/>
                     </FloatingLabel>
                     </Form.Group>
                     <div className="btnSubmit d-flex justify-content-end">

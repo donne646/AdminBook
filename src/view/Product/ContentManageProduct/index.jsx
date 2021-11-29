@@ -1,18 +1,40 @@
-import React from 'react'
+import axios from 'axios';
+import React,{useState,useEffect} from 'react'
 import { Accordion,Table,Button } from 'react-bootstrap';
 
 import {useRouteMatch,useHistory } from 'react-router-dom';
 import CreateProduct from '../CreateProduct';
-const headerTable = ["id","Tên sách","Tác giả","Số lượng","Đơn giá","Số trang","Chi tiết"];
-const testDataProduct = [
-    {id : 1, nameProduct: "Vui vẻ không quạu nha",quantity : 10 , price: 50000, author: "Tản Văn", numberPage: 220,img:[]}// get products có array img vậy 
-];
+const headerTable = ["id","Tên sách","Số lượng","Đơn giá","Số trang","Chi tiết"];
+
 export default function ContentManageProduct() {
+    const [dataProduct, setDataProduct] = useState([]);
     const match = useRouteMatch();
     const history = useHistory();
+    
+    const [flag,setFlag] = useState(true);
+    const handleEditFlag = () => {
+        if(flag){
+          setFlag(false)
+        }else{
+          setFlag(true)
+        }
+      }
     const handleEditProduct = (data)=>{
-        history.push(`${match.url}/${data.id}`)
+        history.push(`${match.url}/${data._id}`)
     }
+    useEffect(()=>{
+        const fetchProduct = async () =>{
+            const reponse = await axios.get("http://localhost:5000/products");
+            console.log(reponse.data)
+            setDataProduct(reponse.data);
+        };
+        fetchProduct();
+    },[flag])
+    const formatCash= (str) =>{
+        return str.split('').reverse().reduce((prev, next, index) => {
+          return ((index % 3) ? next : (next + ',')) + prev
+        })
+     }
     return (
         <div className="ContentManageProduct">
             <Accordion defaultActiveKey="0" className="ContentManageProduct__accordion">
@@ -31,16 +53,15 @@ export default function ContentManageProduct() {
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {testDataProduct.map((data,key)=>{
+                                    {dataProduct.map((data,key)=>{
                                         return (
                                             <tr key={key}>
-                                                <td>{data.id}</td>
-                                                <td>{data.nameProduct}</td>
-                                                <td>{data.author}</td>
-                                                <td>{data.quantity}</td>
-                                                <td>{data.price}</td>
-                                                <td>{data.numberPage}</td>
-                                                <td><Button variant="secondary" onClick={()=>handleEditProduct(data)}>Xem chi tiết</Button></td>
+                                                <td>{data._id}</td>
+                                                <td>{data.name}</td>
+                                                <td>{data.stock}</td>
+                                                <td>{formatCash(data.price+"")}</td>
+                                                <td>{data.printLength}</td>
+                                                <td><Button variant="secondary" onClick={()=>handleEditProduct(data)}><i class="fa fa-eye"></i></Button></td>
                                             </tr>
                                         );
                                     })}
@@ -51,9 +72,9 @@ export default function ContentManageProduct() {
                     </Accordion.Body>
                 </Accordion.Item>
                 <Accordion.Item eventKey="1">
-                    <Accordion.Header>Thêm sản phẩm</Accordion.Header>
+                    <Accordion.Header>Tạo sản phẩm</Accordion.Header>
                     <Accordion.Body>
-                        <CreateProduct/>
+                        <CreateProduct handleAdd={handleEditFlag}/>
                     </Accordion.Body>
                 </Accordion.Item>
             </Accordion>

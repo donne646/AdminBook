@@ -22,12 +22,14 @@
   }
 } 
 .viewAdmin{
-    display: flex;
-    min-height: 100%;
+  display: flex;
+  position: relative;
+  height: 100%;
     &__nav{
-      background: linear-gradient(110deg, #87CEFA 60%, #1E90FF 60%);
-    min-width: 20%;
+    position: fixed;
     height: 100%;
+    background: linear-gradient(110deg, #cbe4ff 60%, #82beff 60%);
+    min-width: 20%;
     box-shadow: 10px 0 5px -2px #888;
     &--header{
       padding: 2rem;
@@ -38,7 +40,6 @@
     }
     &--body{
         display: block !important;
-        height: 100vh;
         margin: 2rem 0;
         //background-color: white;
     }
@@ -47,13 +48,16 @@
     }
     }
     &__content{
-        min-height: 100%;
+      position: absolute;
+      left: 20%;
         padding: 0 2%;
         min-width: 80%;
+        display: inline;
     }
   
 }
 }
+@media (max-width: 768px){
 .navLink{
     margin: 1rem 0;
   a{
@@ -77,12 +81,11 @@
   }
 } 
 .viewAdmin{
-  min-height: 100%;
   &__nav{
     background: linear-gradient(110deg, #cbe4ff 60%, #82beff 60%);
     &--header img{
       display: none;
-        min-width: 100%;
+      min-width: 100%;
     }
     &--body{
       display: none;
@@ -95,12 +98,10 @@
     }
   }
   &__content{
-    min-height: 100%;
   }
 }
 
-
-
+}
 .activeNav{
   color: #007bff;
 }

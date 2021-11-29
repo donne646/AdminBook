@@ -1,24 +1,60 @@
-import React, { useState,useEffect } from 'react'
-import { Accordion,Table,Form,Button,Row,Col } from 'react-bootstrap';
+import axios from 'axios';
+import React, { useState,useEffect} from 'react'
+import { Accordion,Table,Form,Button,Row,Col} from 'react-bootstrap';
 import ModalEditAuthor from "../ModalEditAuthor";
-let headerTable = ["id","Mã khuyến mãi","Sửa"];
-let testdataAuthor = [
-    {id : 1, name: "Nguyễn Nhật Ánh"},
-];
+let headerTable = ["id","Tên tác giả","Sửa"];
 export default function ContentManageAuthor() {
-    const [dataAuthor,setDataVoucher] = useState([]);
+
+    const [flag,setFlag] = useState(false);
+    const handleEditFlag = () =>{
+        if(flag){
+            setFlag(false)
+        }else{
+            setFlag(true)
+        }
+    }
+
+
+    const [authors,setauthors] = useState([]);
     const [validated,setValidated] = useState(false);
     const [values,setValue] = useState({
         name: ""
     });
 
     useEffect(() => {
-        setDataVoucher(testdataAuthor)
-    }, [])
-    const submitFormAdd = (event)=>{
-        const form = event.currentTarget;
-        event.preventDefault();
+        const token = localStorage.getItem("accessToken");
+        const fetchAuthor = async () =>{
+            const response = await axios.get("http://localhost:5000/authors",{
+                headers:{
+                    'Authorization' : `Bearer ${token}` 
+                }
+            });
+            setauthors(response.data);
+        };
+        fetchAuthor();
+    }, [flag])
+    const submitFormAdd = async (event)=>{
+        const token = localStorage.getItem("accessToken");
         setValidated(true);
+        const form = event.currentTarget;
+        if (form.checkValidity() === false) {
+            event.preventDefault();
+        }
+        else{
+            event.preventDefault();
+            const response = await axios.post("http://localhost:5000/authors",values,{
+                headers:{
+                    'Authorization' : `Bearer ${token}` 
+                }
+            })
+            console.log(response)
+            if(response.data.Message){
+                alert(response.data.Message)
+                handleEditFlag();
+                form.reset();
+            }
+        }
+
     };
 
     const inputChange = (event) =>{
@@ -49,12 +85,12 @@ export default function ContentManageAuthor() {
                                 </tr>
                             </thead>
                             <tbody>
-                                {dataAuthor.map((data,key)=>{
+                                {authors.map((author,key)=>{
                                     return (
                                         <tr key={key}>
-                                            <td>{data.id}</td>
-                                            <td>{data.name}</td>
-                                            <td><ModalEditAuthor dataModal={data}/></td>
+                                            <td>{author._id}</td>
+                                            <td>{author.name}</td>
+                                            <td><ModalEditAuthor dataModal={author} handleEdit={handleEditFlag}/></td>
                                         </tr>
                                     );
                                 })}

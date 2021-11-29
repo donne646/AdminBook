@@ -1,14 +1,22 @@
 import React,{useState,useEffect,useContext} from 'react';
+import axios from 'axios';
 import { Table,Accordion } from 'react-bootstrap';
-const headerTable = ["id","User name"];
-const testDataUser = [
-    {id: 1, userName: "Huunhan887"}
-]
+const headerTable = ["id","Username","Email",""];
+
 export default function ContentManageUser() {
     const [dataUser,setDataUser] = useState([]);
     useEffect(() => {
-        setDataUser(testDataUser);
-    }, [])
+        const token = localStorage.getItem("accessToken");
+        const fetchData = async ()=>{
+            const response = await axios.get("http://localhost:5000/accounts",{
+                headers:{
+                    'Authorization' : `Bearer ${token}` 
+                }
+            })
+            setDataUser(response.data);
+        }
+        fetchData();
+    }, []);
     return (
         <div className="ContentManageUser">
             <Accordion defaultActiveKey="0" className="ContentManageUser__accordion">
@@ -30,8 +38,9 @@ export default function ContentManageUser() {
                                 {dataUser.map((data,key)=>{
                                     return (
                                         <tr key={key}>
-                                            <td>{data.id}</td>
-                                            <td>{data.userName}</td>
+                                            <td>{data._id}</td>
+                                            <td>{data.username}</td>
+                                            <td>{data.email}</td>
                                         </tr>
                                     );
                                 })}

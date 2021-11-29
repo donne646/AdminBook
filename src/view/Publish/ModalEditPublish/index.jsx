@@ -1,6 +1,6 @@
 import React,{useState} from 'react';
 import {Modal,Button,Form,Row,Col} from "react-bootstrap";
-
+import axios from 'axios';
 export default function ModalEditPublish(props) {
     const [show, setShow] = useState(false);  
     const [values,setValue] = useState(props.dataModal);
@@ -9,10 +9,17 @@ export default function ModalEditPublish(props) {
     const handleClose = () => setShow(false);
         
     const handleShow = () => setShow(true);
-    const handleEdit = (event) =>{
+    const handleEdit = async (event) =>{
+      const token = localStorage.getItem('accessToken');
       event.preventDefault();
-      // Post server
-      alert("Lưu thành công");
+      const response = await axios.patch("http://localhost:5000/publishers/"+props.dataModal._id,values,{
+        headers:{
+          'Authorization' : `Bearer ${token}` 
+        }
+      });
+      if(response.data.Message){
+        props.handleEdit();
+      }
       handleClose();
     }
     const inputChange = (event) =>{
@@ -33,7 +40,7 @@ export default function ModalEditPublish(props) {
     return (
       <>
         <Button variant="primary" onClick={handleShow}>
-          Sửa
+          <i className="fa fa-edit"></i>
         </Button>
         <Modal show={show} onHide={handleClose} animation={false} size="lg" aria-labelledby="contained-modal-title-vcenter" centered>
           <Modal.Header closeButton>
@@ -44,7 +51,7 @@ export default function ModalEditPublish(props) {
                             <Row>
                                 <Form.Group as={Col} controlId="formGridId">
                                     <Form.Label>ID</Form.Label>
-                                    <Form.Control type='text' name="id" defaultValue={props.dataModal.id} readOnly required/>
+                                    <Form.Control type='text' name="id" defaultValue={props.dataModal._id} readOnly />
                                 </Form.Group>
                                 <Form.Group as={Col} controlId="formGridNamePublish">
                                     <Form.Label>Tên thể loại</Form.Label>

@@ -1,33 +1,59 @@
 
 import axios from 'axios';
-import React,{useState,useEffect,useContext} from 'react'
+import React,{useState,useEffect} from 'react'
 import { Accordion,Form,Col,Row,Button,Table} from 'react-bootstrap';
-import CategoryContext from '../../../Context/CategoryContext/CategoryContent';
 import ModalEditCategory from '../ModalEditCategory';
-let headerTable = ["id","Tên thể loại","Sửa"];
-let testdataCategory = [
-    {id : 1, name: "Trinh Thám"},
-    {id : 2, name: "Thiếu Nhi"},
-    {id : 3, name: "Tiểu Thuyết"},
-    {id : 4, name: "Giáo trình"},
-];
+let headerTable = ["id","Tên thể loại","Xóa","Sửa"];
+
 export default function ContentManageCategory() {
+
+    const [flag,setFlag] = useState(false);
+    const handleEditFlag = () =>{
+        if(flag){
+            setFlag(false)
+        }else{
+            setFlag(true)
+        }
+    }
+
     const [dataCategory,setDataCategory] = useState([]);
-    const [values,setValue] = useState({
-        nameCategoryValue: ""
-    });
+    const [values,setValue] = useState();
     const [validated,setValidated] = useState(false);
-    const CateContext = useContext(CategoryContext);
     useEffect(() => {
-        setDataCategory(testdataCategory);
-        console.log(CateContext)
-    }, [CateContext.flag]);
+        const token = localStorage.getItem("accessToken");
+        const fetchData = async () =>{
+            const response = await axios.get("http://localhost:5000/category",{
+                headers:{
+                    'Authorization' : `Bearer ${token}` 
+                }
+            });
+            setDataCategory(response.data);
+        }
+        fetchData();
+    }, [flag]);
 
 
-    const submitFormAdd = (event)=>{
-        const form = event.currentTarget;
-        event.preventDefault();
+    const submitFormAdd = async (event)=>{
+        const token = localStorage.getItem("accessToken");
         setValidated(true);
+        const form = event.currentTarget;
+        if (form.checkValidity() === false) {
+            event.preventDefault();
+        }
+        else{
+            event.preventDefault();
+            const response = await axios.post("http://localhost:5000/category/create",values,{
+                headers:{
+                    'Authorization' : `Bearer ${token}` 
+                }
+            })
+            console.log(response)
+            if(response.data.Message){
+                alert(response.data.Message)
+                handleEditFlag();
+                form.reset();
+            }
+        }
     };
 
     const inputChange = (event) =>{
@@ -39,6 +65,22 @@ export default function ContentManageCategory() {
             [name] : value
         })
         );
+    }
+    const deleteCategory = async (data) =>{
+        const token = localStorage.getItem("accessToken");
+        const response = await axios.delete("http://localhost:5000/category/"+data,
+        {
+            headers:{
+                'Authorization' : `Bearer ${token}` 
+            }
+        });
+        console.log(response)
+        if(response.data.Message === "Xóa thể loại thành công" ){
+            alert(response.data.Message)
+            handleEditFlag();
+        }else{
+            alert(response.data.message)
+        }
     }
     return (
         <div className="ContentManageCategory">
@@ -61,9 +103,10 @@ export default function ContentManageCategory() {
                                 {dataCategory.map((data,key)=>{
                                     return (
                                         <tr key={key}>
-                                            <td>{data.id}</td>
+                                            <td>{data._id}</td>
                                             <td>{data.name}</td>
-                                            <td><ModalEditCategory dataModal={data}/></td>
+                                            <td><Button variant="danger" onClick={()=>deleteCategory(data._id)}><i class="fa fa-trash"></i></Button></td>
+                                            <td><ModalEditCategory dataModal={data} handleEdit = {handleEditFlag}/></td>
                                         </tr>
                                     );
                                 })}

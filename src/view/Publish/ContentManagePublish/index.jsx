@@ -4,24 +4,56 @@ import React,{useState,useEffect} from 'react'
 import { Accordion,Form,Col,Row,Button,Table} from 'react-bootstrap';
 import ModalEditPublish from '../ModalEditPublish';
 const headerTable = ["id","Tên nhà xuất bản","Sửa"];
-const testDataPublish = [
-    {id:1 , name: "NXB trẻ"}
-]
+
 export default function ContentManagePublish() {
+
+    const [flag,setFlag] = useState(false);
+    const handleEditFlag = () =>{
+        if(flag){
+            setFlag(false)
+        }else{
+            setFlag(true)
+        }
+    }
+
     const [dataPublish,setDataPublish] = useState([]);
-    const [values,setValue] = useState({
-        namePublishValue: ""
-    });
+    const [values,setValue] = useState();
     const [validated,setValidated] = useState(false);
 
     useEffect(() => {
-        setDataPublish(testDataPublish);
-    }, []);
+        const token = localStorage.getItem("accessToken");
+        const fetchData = async ()=>{
+            const response = await axios.get("http://localhost:5000/publishers",{
+                headers:{
+                    'Authorization' : `Bearer ${token}` 
+                }
+            })
+            setDataPublish(response.data);
+        }
+        fetchData();
+    }, [flag]);
     
-    const submitFormAdd = (event)=>{
-        const form = event.currentTarget;
-        event.preventDefault();
+    const submitFormAdd = async (event)=>{
+        const token = localStorage.getItem("accessToken");
         setValidated(true);
+        const form = event.currentTarget;
+        if (form.checkValidity() === false) {
+            event.preventDefault();
+        }
+        else{
+            event.preventDefault();
+            const response = await axios.post("http://localhost:5000/publishers",values,{
+                headers:{
+                    'Authorization' : `Bearer ${token}` 
+                }
+            })
+            console.log(response)
+            if(response.data.Message){
+                alert(response.data.Message)
+                handleEditFlag();
+                form.reset();
+            }
+        }
     };
 
     const inputChange = (event) =>{
@@ -56,9 +88,9 @@ export default function ContentManagePublish() {
                                 {dataPublish.map((data,key)=>{
                                     return (
                                         <tr key={key}>
-                                            <td>{data.id}</td>
+                                            <td>{data._id}</td>
                                             <td>{data.name}</td>
-                                            <td><ModalEditPublish dataModal={data}/></td>
+                                            <td><ModalEditPublish dataModal={data} handleEdit ={handleEditFlag}/></td>
                                         </tr>
                                     );
                                 })}
@@ -68,7 +100,7 @@ export default function ContentManagePublish() {
                     </Accordion.Body>
                 </Accordion.Item>
                 <Accordion.Item eventKey="1">
-                    <Accordion.Header>Thêm thể loại</Accordion.Header>
+                    <Accordion.Header>Thêm nhà xuất bản</Accordion.Header>
                     <Accordion.Body>
                         <Form noValidate validated={validated} onSubmit={(event)=>submitFormAdd(event)} className="FormAddPublish">
                             <Row>
